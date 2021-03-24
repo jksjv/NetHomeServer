@@ -185,6 +185,7 @@ public class HueBridge extends HomeItemAdapter {
     }
 
     private void reportAllLampsState() {
+        refreshCounter = 0;
         try {
             List<LightId> ids = hueBridge.listLights(userName);
             for (LightId id : ids) {
