@@ -152,7 +152,12 @@ public class HueBridge extends HomeItemAdapter {
             return true;
         } else if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("ReportItems") ||
                 (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("MinuteEvent") && refreshCounter++ > refreshInterval)) {
-            reportAllLampsState();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    reportAllLampsState();
+                }
+            }).run();
             if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals("ReportItems")) {
                 reportKnownSensors();
             }
@@ -190,12 +195,15 @@ public class HueBridge extends HomeItemAdapter {
             List<LightId> ids = hueBridge.listLights(userName);
             for (LightId id : ids) {
                 reportLampState(id.getLampId());
+                Thread.sleep(100);
             }
         } catch (IOException e) {
             this.state = "Disconnected";
             logger.log(Level.INFO, "Failed to contact HueBridge", e);
         } catch (HueProcessingException e) {
             logger.log(Level.INFO, "Command failed in HueBridge", e);
+        } catch (InterruptedException e) {
+            // Do Dinada
         }
     }
 
