@@ -54,12 +54,12 @@ public class MqttLampTest {
 
     @Test
     public void canSendOn() throws Exception {
-        canSendParameter("OnMessage", "On", "Foo");
+        canSendParameter("OnMessage", "on", "Foo");
     }
 
     @Test
     public void canSendOff() throws Exception {
-        canSendParameter("OffMessage", "Off", "Foo");
+        canSendParameter("OffMessage", "off", "Foo");
     }
 
     public void canSendParameter(String attributeName, String command, String value) throws Exception {
@@ -103,9 +103,9 @@ public class MqttLampTest {
 
     @Test
     public void canToggle() throws Exception {
-        proxy.callAction("Toggle");
+        proxy.callAction("toggle");
         assertThat(proxy.getAttributeValue("State"), is("On"));
-        proxy.callAction("Toggle");
+        proxy.callAction("toggle");
         assertThat(proxy.getAttributeValue("State"), is("Off"));
     }
 }
