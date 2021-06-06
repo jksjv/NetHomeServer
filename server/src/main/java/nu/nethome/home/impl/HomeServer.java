@@ -83,7 +83,7 @@ public class HomeServer implements HomeItem, HomeService, ServiceState, ServiceC
                 + "</HomeItem> ");
     }
 
-    private static final int MAX_QUEUE_SIZE = 30;
+    private static final int MAX_QUEUE_SIZE = 100;
     private static final String QUIT_EVENT = "BrokerQuitEvent";
     public static final int LOG_RECORD_CAPACITY = 50;
     public static final int EVENT_COUNT_PERIOD = 15;
