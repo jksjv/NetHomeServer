@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import nu.nethome.home.item.AutoCreationInfo;
 import nu.nethome.home.item.HomeItemAdapter;
 import nu.nethome.home.item.HomeItemType;
+import nu.nethome.home.items.UPnPScanner;
 import nu.nethome.home.items.fineoffset.FineOffsetThermometer;
 import nu.nethome.home.items.ikea.JSONData;
 import nu.nethome.home.system.Event;
@@ -75,7 +76,7 @@ public class DeconzBridge extends HomeItemAdapter {
 	}
 
 	private static boolean isDeCONZUPnPEvent(Event e) {
-		return e.getAttribute("ModelName").startsWith("deCONZ bridge");
+		return e.getAttribute(UPnPScanner.FRIENDLY_NAME).startsWith("Phoscon-GW");
 	}
 
 	private static final String MODEL = ("<?xml version = \"1.0\"?> \n"
@@ -117,10 +118,11 @@ public class DeconzBridge extends HomeItemAdapter {
 		checkConnection();
 		try {
 			if (!url.startsWith("http")) {
-				webSocketClient = new DeconzWebsocketClient(new URI("ws://" + url + ":443"));
-			} else {
-				webSocketClient = new DeconzWebsocketClient(new URI("ws" + url.substring(4) + ":443"));
+				url = "http://" + url;
 			}
+			URI tempUri = new URI(url);
+			URI connectionURI = new URI("ws", tempUri.getUserInfo(), tempUri.getHost(),443,tempUri.getPath(),tempUri.getQuery(), tempUri.getFragment());
+			webSocketClient = new DeconzWebsocketClient(connectionURI);
 
 			webSocketClient.connect();
 		} catch (URISyntaxException e) {
