@@ -82,7 +82,7 @@ public class DeconzZHAThermometer extends HomeItemAdapter implements HomeItem, V
 	}
 
 	public boolean receiveEvent(Event event) {
-		if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals(DE_CONZ_SENSOR_MESSAGE_ZHA_THERMOMETER)
+		if ((event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals(DE_CONZ_SENSOR_MESSAGE_ZHA_THERMOMETER) ||event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals(DE_CONZ_SENSOR_MESSAGE)) 
 				&& event.getAttribute("Direction").equals("In")
 				&& event.getAttribute(DE_CONZ_ID).equals(itemDeviceId)) {
 			setTemperature(String.format("%.1f", (event.getAttributeInt("deCONZ.temperature") * 0.01)));

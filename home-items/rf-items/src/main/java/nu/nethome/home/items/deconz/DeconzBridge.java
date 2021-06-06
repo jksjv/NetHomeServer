@@ -360,7 +360,7 @@ public class DeconzBridge extends HomeItemAdapter {
 					event.setAttribute("deCONZ.power", zhaSensor.getPower());
 					event.setAttribute("deCONZ.voltage", zhaSensor.getVoltage());
 					event.setAttribute("deCONZ.lastupdated", zhaSensor.getLastupdated());
-					server.send(event);
+//					server.send(event);
 				} else if (sensor.getType().equals(ZHA_CONSUMPTION)) {
 					ZHAConsumptionSensor zhaSensor = getZHAConsumptionSensor(sensor.getId());
 					Event event = server.createEvent(DE_CONZ_SENSOR_MESSAGE_ZHA_CONSUMPTION, "");
@@ -373,7 +373,7 @@ public class DeconzBridge extends HomeItemAdapter {
 					event.setAttribute("deCONZ.Manufacturername", zhaSensor.getManufacturername());
 					event.setAttribute("deCONZ.consumption", zhaSensor.getConsumption());
 					event.setAttribute("deCONZ.lastupdated", zhaSensor.getLastupdated());
-					server.send(event);
+//					server.send(event);
 				} else if (sensor.getType().equals(ZHA_TEMPERATURE)) {
 					ZHAThermometer zhaSensor = getZHAThermometer(sensor.getId());
 					Event event = server.createEvent(DE_CONZ_SENSOR_MESSAGE_ZHA_THERMOMETER, "");
@@ -638,7 +638,11 @@ public class DeconzBridge extends HomeItemAdapter {
 			} catch (JSONException je) {
 				logger.finest("Json object with no state object");
 			}
-			server.send(event);
+
+			if(!event.getAttribute("deCONZ.temperature").isEmpty()) {
+				server.send(event);	
+			}
+			
 		}
 
 		@Override
