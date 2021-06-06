@@ -21,7 +21,7 @@ import static nu.nethome.home.items.deconz.DeconzConstants.*;
 public class DeconzZHAThermometer extends HomeItemAdapter implements HomeItem, ValueItem {
 
 	private static Logger logger = Logger.getLogger(DeconzZHAThermometer.class.getName());
-	
+
 	private String temperature = "";
 	private ExtendedLoggerComponent tempLoggerComponent = new ExtendedLoggerComponent(this);
 	private String itemDeviceId = "";
@@ -29,15 +29,14 @@ public class DeconzZHAThermometer extends HomeItemAdapter implements HomeItem, V
 	private static final SimpleDateFormat dateFormatterIn = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	protected boolean hasBeenUpdated = false;
 	private Date latestUpdateOrCreation = new Date();
-	
+
 	private String sensorModel;
-	private String type; 
+	private String type;
 	private String version;
 	private String manufacturer;
 
 	public static class deCONZCreationInfo implements AutoCreationInfo {
-		
-		
+
 		static final String[] CREATION_EVENTS = { DE_CONZ_SENSOR_MESSAGE_ZHA_THERMOMETER };
 
 		@Override
@@ -74,10 +73,11 @@ public class DeconzZHAThermometer extends HomeItemAdapter implements HomeItem, V
 		itemDeviceId = event.getAttribute(DE_CONZ_ID);
 		this.type = event.getAttribute("deCONZ.Type");
 		this.version = event.getAttribute("deCONZ.Version");
-		this.sensorModel  = event.getAttribute("deCONZ.Model");
+		this.sensorModel = event.getAttribute("deCONZ.Model");
 //		this.name = event.getAttribute("deCONZ.Name");
 		this.manufacturer = event.getAttribute("deCONZ.Manufacturername");
-		
+		setTemperature(String.format("%.1f", (event.getAttributeInt("deCONZ.temperature") * 0.01)));
+
 		return true;
 	}
 
@@ -85,8 +85,8 @@ public class DeconzZHAThermometer extends HomeItemAdapter implements HomeItem, V
 		if (event.getAttribute(Event.EVENT_TYPE_ATTRIBUTE).equals(DE_CONZ_SENSOR_MESSAGE_ZHA_THERMOMETER)
 				&& event.getAttribute("Direction").equals("In")
 				&& event.getAttribute(DE_CONZ_ID).equals(itemDeviceId)) {
-			setTemperature(String.format("%.1f", (event.getAttributeInt("deCONZ.temperature")*0.01)));
-			hasBeenUpdated=true;
+			setTemperature(String.format("%.1f", (event.getAttributeInt("deCONZ.temperature") * 0.01)));
+			hasBeenUpdated = true;
 			try {
 				latestUpdateOrCreation = dateFormatterIn.parse(event.getAttribute("deCONZ.lastupdated"));
 			} catch (ParseException e) {
@@ -170,6 +170,5 @@ public class DeconzZHAThermometer extends HomeItemAdapter implements HomeItem, V
 	public void setTemperature(String temperature) {
 		this.temperature = temperature;
 	}
-
 
 }
